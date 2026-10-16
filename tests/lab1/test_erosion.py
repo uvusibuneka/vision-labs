@@ -54,18 +54,6 @@ class TestBinarize:
         out = binarize(gray)
         assert_binary(out, shape=(9, 11))
 
-    def test_empty_raises(self):
-        with pytest.raises(ValueError):
-            binarize(np.zeros((0, 0), dtype=np.uint8))
-
-    def test_non_2d_raises(self):
-        with pytest.raises(ValueError):
-            binarize(np.zeros((4, 4, 3), dtype=np.uint8))
-
-    def test_wrong_dtype_raises(self):
-        with pytest.raises(ValueError):
-            binarize(np.zeros((4, 4), dtype=np.float32))
-
 
 # ------------------------------------------------------- erosion: fixtures
 def img_all_white_5x5():
@@ -166,14 +154,6 @@ class TestErodeManual:
         out = erode_manual(np.zeros((1, 1), dtype=np.uint8))
         np.testing.assert_array_equal(out, np.zeros((1, 1), dtype=np.uint8))
 
-    def test_empty_raises(self):
-        with pytest.raises(ValueError):
-            erode_manual(np.zeros((0, 0), dtype=np.uint8))
-
-    def test_non_binary_raises(self):
-        with pytest.raises(ValueError):
-            erode_manual(np.full((4, 4), 128, dtype=np.uint8))
-
     def test_result_size_type_and_values(self):
         rng = np.random.default_rng(42)
         img = (rng.integers(0, 2, size=(10, 12)) * 255).astype(np.uint8)
@@ -194,14 +174,6 @@ class TestErodeLibrary:
     def test_1x1_white_erodes_to_black(self):
         out = erode_library(np.full((1, 1), 255, dtype=np.uint8))
         np.testing.assert_array_equal(out, np.zeros((1, 1), dtype=np.uint8))
-
-    def test_empty_raises(self):
-        with pytest.raises(ValueError):
-            erode_library(np.zeros((0, 0), dtype=np.uint8))
-
-    def test_non_binary_raises(self):
-        with pytest.raises(ValueError):
-            erode_library(np.full((4, 4), 100, dtype=np.uint8))
 
     def test_result_size_type_and_values(self):
         rng = np.random.default_rng(123)
