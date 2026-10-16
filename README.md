@@ -8,11 +8,11 @@
 
 ```
 vision-labs/
-├── src/lab1/erosion.py   # binarize, erode_library, erode_manual
-├── src/lab2/             # задел под ЛР2
-├── src/lab3/             # задел под ЛР3
-├── tests/lab1/           # 45 тестов
-└── docs/lab1/            # картинки для отчёта
+├── src/lab1/erosion.py 
+├── src/lab2/             
+├── src/lab3/             
+├── tests/lab1/        
+└── docs/lab1/     
 ```
 
 ## Запуск
