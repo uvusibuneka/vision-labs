@@ -1,11 +1,6 @@
 # ЛР1. Бинарная эрозия примитивом 3×3 (вариант 7)
 
 Лабораторная по курсу «Компьютерное зрение».
-Условие — `../КЗ/files/LW1.pdf`.
-
-**Задание:** реализовать алгоритм по варианту в двух версиях
-(библиотечная + нативная), сравнить быстродействие, выложить код
-и отчёт-README на GitHub.
 
 **Вариант 7:** эрозия структурным элементом 3×3.
 
@@ -23,11 +18,11 @@ vision-labs/
 ## Запуск
 
 ```bash
-uv sync --group dev          # установка окружения (один раз)
-uv run pytest tests/lab1 -v # тесты ЛР1
-uv run pytest               # все тесты
-uv run ruff check .         # линт
-uv run ruff format --check . # проверка форматирования
+uv sync --group dev         
+uv run pytest tests/lab1 -v 
+uv run pytest               
+uv run ruff check .         
+uv run ruff format --check .
 ```
 
 Бенчмарк (медиана 7 прогонов после warmup, маски — `default_rng(7)`):
@@ -164,7 +159,6 @@ out = (
 
 ## 5. Источники
 
-1. `../КЗ/files/LW1.pdf` — постановка ЛР1.
-2. Документация OpenCV: `cv::erode`, `BORDER_CONSTANT`, `THRESH_BINARY`.
-3. Документация NumPy: `pad`, `where`, срезы массивов.
-4. Gonzalez R. C., Woods R. E. *Digital Image Processing*, гл. 9.
+1. Документация OpenCV: `cv::erode`, `BORDER_CONSTANT`, `THRESH_BINARY`.
+2. Документация NumPy: `pad`, `where`, срезы массивов.
+3. Gonzalez R. C., Woods R. E. *Digital Image Processing*, гл. 9.
