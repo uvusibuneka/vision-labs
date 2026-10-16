@@ -1,14 +1,3 @@
-"""LW1 variant 7: binary erosion with 3x3 square structuring element.
-
-Contract:
-- Binary image: 2D ``np.ndarray``, dtype ``uint8``, values only ``{0, 255}``.
-- ``binarize``: 2D grayscale ``uint8`` -> binary ``uint8`` via ``src > thresh``.
-- ``erode_library`` / ``erode_manual``: binary -> binary, same HxW, ``uint8``.
-- Kernel: 3x3 square of ones, zero padding (outside image == 0).
-- Empty image (size == 0): raise ``ValueError``.
-- Non-binary input to erode_*: raise ``ValueError``.
-"""
-
 from __future__ import annotations
 
 import cv2
@@ -43,7 +32,6 @@ def _check_binary(binary: np.ndarray) -> None:
 
 
 def binarize(gray: np.ndarray, thresh: int = 127) -> np.ndarray:
-    """Binarize grayscale image: 255 where gray > thresh, else 0."""
     _check_gray(gray)
     if not 0 <= thresh <= 255:
         raise ValueError(f"thresh must be in [0, 255], got {thresh}")
@@ -51,7 +39,6 @@ def binarize(gray: np.ndarray, thresh: int = 127) -> np.ndarray:
 
 
 def erode_library(binary: np.ndarray) -> np.ndarray:
-    """Erode binary image with 3x3 square via OpenCV (zero-padding border)."""
     _check_binary(binary)
     kernel = np.ones((KERNEL_SIZE, KERNEL_SIZE), dtype=np.uint8)
     out = cv2.erode(binary, kernel, borderType=cv2.BORDER_CONSTANT, borderValue=0)
@@ -59,27 +46,13 @@ def erode_library(binary: np.ndarray) -> np.ndarray:
 
 
 def erode_manual(binary: np.ndarray) -> np.ndarray:
-    """Erode binary image with 3x3 square via plain Python loops.
-
-    Output pixel is foreground iff every pixel of its 3x3 neighbourhood
-    (zero-padded outside the image) is foreground. Early exit on the
-    first background pixel inside the window.
-    """
     _check_binary(binary)
     height, width = binary.shape
-    pad = KERNEL_SIZE // 2
-    padded = np.pad(binary, pad, mode="constant", constant_values=0)
-    out = np.zeros((height, width), dtype=np.uint8)
-    for i in range(height):
-        for j in range(width):
-            eroded = True
-            for ki in range(KERNEL_SIZE):
-                for kj in range(KERNEL_SIZE):
-                    if padded[i + ki, j + kj] != FOREGROUND:
-                        eroded = False
-                        break
-                if not eroded:
-                    break
-            if eroded:
-                out[i, j] = FOREGROUND
-    return out
+    padded = np.pad(binary, KERNEL_SIZE // 2, mode="constant", constant_values=0)
+    mask = (padded // FOREGROUND).astype(np.uint8)
+    windows = np.lib.stride_tricks.sliding_window_view(mask, (KERNEL_SIZE, KERNEL_SIZE))
+    cols = windows.reshape(height * width, KERNEL_SIZE * KERNEL_SIZE).astype(np.int32)
+    kernel_vec = np.ones((KERNEL_SIZE * KERNEL_SIZE, 1), dtype=np.int32)
+    counts = cols @ kernel_vec
+    out = (counts.reshape(height, width) == KERNEL_SIZE * KERNEL_SIZE).astype(np.uint8)
+    return (out * FOREGROUND).astype(np.uint8)
