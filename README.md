@@ -23,9 +23,33 @@ vision-labs/
 ## Запуск
 
 ```bash
-uv sync --group dev
-uv run pytest tests/lab1 -v   # тесты ЛР1
-uv run ruff check .           # линт
+uv sync --group dev          # установка окружения (один раз)
+uv run pytest tests/lab1 -v # тесты ЛР1
+uv run pytest               # все тесты
+uv run ruff check .         # линт
+uv run ruff format --check . # проверка форматирования
+```
+
+Бенчмарк (медиана 7 прогонов после warmup, маски — `default_rng(7)`):
+
+```bash
+uv run python -c "
+import sys, time, statistics, numpy as np
+sys.path.insert(0, 'src')
+from lab1.erosion import erode_library, erode_manual
+rng = np.random.default_rng(0)
+w0 = (rng.integers(0, 2, size=(32, 32)) * 255).astype('uint8')
+erode_library(w0); erode_manual(w0)
+for h, w in [(64, 64), (128, 128), (256, 256), (512, 512), (1024, 1024)]:
+    rng = np.random.default_rng(7)
+    img = (rng.integers(0, 2, size=(h, w)) * 255).astype('uint8')
+    assert (erode_library(img) == erode_manual(img)).all()
+    libs, mans = [], []
+    for _ in range(7):
+        t = time.perf_counter(); erode_library(img); libs.append((time.perf_counter() - t) * 1000)
+        t = time.perf_counter(); erode_manual(img); mans.append((time.perf_counter() - t) * 1000)
+    print(f'{h}x{w}: lib={statistics.median(libs):.3f}ms man={statistics.median(mans):.3f}ms')
+"
 ```
 
 ## 1. Теоретическая база
