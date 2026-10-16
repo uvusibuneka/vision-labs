@@ -96,9 +96,6 @@ vision-labs/                   ← корень репозитория (здес
 ├── src/lab1/
 │   ├── __init__.py
 │   └── erosion.py           ← binarize, erode_library, erode_manual
-├── src/lab1/
-│   ├── __init__.py
-│   └── erosion.py           ← binarize, erode_library, erode_manual
 ├── src/lab2/                ← задел под ЛР2
 ├── src/lab3/                ← задел под ЛР3
 ├── tests/lab1/
