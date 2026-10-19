@@ -21,8 +21,14 @@ def erode_manual(binary: np.ndarray) -> np.ndarray:
     padded = np.pad(m, 1, mode="constant", constant_values=False)
     top, mid, bot = padded[:-2, :], padded[1:-1, :], padded[2:, :]
     out = (
-        top[:, :-2]  & top[:, 1:-1]  & top[:, 2:] &
-        mid[:, :-2]  & mid[:, 1:-1]  & mid[:, 2:] &
-        bot[:, :-2]  & bot[:, 1:-1]  & bot[:, 2:]
+        top[:, :-2]
+        & top[:, 1:-1]
+        & top[:, 2:]
+        & mid[:, :-2]
+        & mid[:, 1:-1]
+        & mid[:, 2:]
+        & bot[:, :-2]
+        & bot[:, 1:-1]
+        & bot[:, 2:]
     )
     return out.astype(np.uint8) * 255

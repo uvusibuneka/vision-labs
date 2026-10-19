@@ -1,0 +1,42 @@
+{
+  "input": "test-videos/mona-lisa-blur-extra-credit.avi",
+  "output": "results/lab2/mona-lisa-blur-extra-credit_tracked.mp4",
+  "label": "Mona Lisa",
+  "detector": "sift",
+  "frames": 558,
+  "frames_with_box": 455,
+  "frames_with_box_ratio": 0.8154,
+  "keyframes": 10,
+  "mean_inliers": 1281.72,
+  "min_inliers": 226,
+  "max_inliers": 3206,
+  "mean_box_area": 26600.5,
+  "elapsed_sec": 48.91,
+  "processing_fps": 11.41,
+  "config": {
+    "detector": "sift",
+    "max_features": 1200,
+    "scale_pyramid": [
+      1.0,
+      0.7,
+      0.5,
+      0.35,
+      0.25,
+      0.18
+    ],
+    "ratio": 0.75,
+    "ransac_threshold": 3.0,
+    "ransac_iterations": 5000,
+    "ransac_confidence": 0.999,
+    "min_inliers": 10,
+    "strong_inliers": 30,
+    "max_keyframes": 10,
+    "keyframe_descriptors": 400,
+    "keyframe_area_ratio": 0.4,
+    "keyframe_scale_step": 0.75,
+    "keyframe_interval": 60,
+    "min_box_area": 150.0,
+    "max_box_area_ratio": 1.2,
+    "temporal_area_ratio": 3.0
+  }
+}
